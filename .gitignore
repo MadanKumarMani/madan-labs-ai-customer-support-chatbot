@@ -26,4 +26,4 @@ vector_db/
 
 # Operating system files
 .DS_Store
-Thumbs.db
+Thumbs.db.env
