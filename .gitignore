@@ -17,6 +17,9 @@ venv/
 chroma_db/
 chroma/
 
+# VectorDB
+vector_db/
+
 # IDE files
 .vscode/
 .idea/
