@@ -454,7 +454,7 @@ agent_executor = AgentExecutor(
     agent=agent,
     tools=tools,
     verbose=True,
-    max_iterations=2,
+    max_iterations=5,
     early_stopping_method="force",
     return_intermediate_steps=True
 )
