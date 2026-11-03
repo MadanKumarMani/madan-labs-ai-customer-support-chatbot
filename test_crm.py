@@ -14,4 +14,4 @@ result=create_lead(
 )
 
 
-print(result)
+print("CRM test execution completed.")

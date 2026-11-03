@@ -22,7 +22,7 @@ def product_search_tool(question: str):
     relevant product information.
     """
 
-    print("PRODUCT TOOL CALLED")
+
 
     docs = search_products(question)
 
@@ -48,44 +48,37 @@ def crm_lead_tool(
     product_interest: Optional[str] = ""
 ):
     """
-   Create or update customer lead in Zoho CRM.
+    Create or update a customer lead in Zoho CRM.
 
-    Only use AFTER the customer voluntarily shares
-    their contact details.
-
-    Minimum required:
-    - customer name
-    - phone number
-
-    Optional:
-    - city
-    - product interest
+    Requires customer name and phone number.
     """
 
+    print("CRM TOOL CALLED - INPUT VALIDATION STARTED")
 
-    print(
-        "CRM TOOL CALLED"
-    )
+    # Safely handle None values
+    name = (name or "").strip()
+    phone = (phone or "").strip()
+    city = (city or "").strip()
+    product_interest = (product_interest or "").strip()
 
-
-    # Don't create/update a CRM record if phone is missing
-    if not name.strip():
+    if not name:
         return "Customer name not provided. CRM lead not created."
 
-    if not phone.strip():
+    if not phone:
         return "Customer phone number not provided. CRM lead not created."
 
+    try:
+        result = create_or_update_lead(
+            name,
+            phone,
+            city,
+            product_interest
+        )
 
-    return create_or_update_lead(
+        print("CRM LEAD OPERATION COMPLETED")
 
-        name,
+        return str(result)
 
-        phone,
-
-        city,
-
-        product_interest
-
-    
-    )
-
+    except Exception as e:
+        print("CRM LEAD OPERATION FAILED:", type(e).__name__)
+        return "Unable to save the customer enquiry due to a technical issue. Please try again later."

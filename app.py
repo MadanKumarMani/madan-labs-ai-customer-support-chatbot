@@ -1,5 +1,8 @@
+import os
 import streamlit as st
 from agents.customer_ai_agent import customer_ai_chat
+from dotenv import load_dotenv
+load_dotenv()
 
 
 st.set_page_config(
@@ -102,7 +105,12 @@ if role == "Customer":
         # LangChain Agent response
         with st.spinner("AI Agent thinking..."):
 
-            answer = customer_ai_chat(question)
+              previous_messages = st.session_state.customer_messages[:-1]
+
+              answer = customer_ai_chat(
+                    question,
+                    previous_messages=previous_messages
+              )
 
         # save AI response
         st.session_state.customer_messages.append(
@@ -147,8 +155,8 @@ else:
 
 
             if (
-                email=="admin@gmail.com"
-                and password=="123"
+                email == os.getenv("EMPLOYEE_EMAIL")
+                and password == os.getenv("EMPLOYEE_PASSWORD")
             ):
 
 

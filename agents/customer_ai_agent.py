@@ -6,14 +6,15 @@ load_dotenv()
 from langchain_groq import ChatGroq
 
 
-from langchain.agents import (
+from langchain_classic.agents import (
     create_tool_calling_agent,
     AgentExecutor
 )
 
 
 from langchain_core.prompts import (
-    ChatPromptTemplate
+    ChatPromptTemplate,
+    MessagesPlaceholder
 )
 
 
@@ -408,11 +409,14 @@ Never call crm_lead_tool immediately after product_search_tool unless the custom
 
 ),
 
+MessagesPlaceholder(variable_name="chat_history"),
+
 
 (
 "human",
 "{input}"
 ),
+
 
 
 (
@@ -453,30 +457,43 @@ agent = create_tool_calling_agent(
 agent_executor = AgentExecutor(
     agent=agent,
     tools=tools,
-    verbose=True,
+    verbose=False,
     max_iterations=5,
     early_stopping_method="force",
-    return_intermediate_steps=True
+    return_intermediate_steps=False
 )
 
 
 
 
-def customer_ai_chat(
+from langchain_core.messages import HumanMessage, AIMessage
 
-    message
 
-):
+def customer_ai_chat(message, previous_messages=None):
 
+    chat_history = []
+
+    if previous_messages:
+
+        for msg in previous_messages:
+
+            if msg["role"] == "user":
+                chat_history.append(
+                    HumanMessage(content=msg["content"])
+                )
+
+            elif msg["role"] == "assistant":
+                chat_history.append(
+                    AIMessage(content=msg["content"])
+                )
 
     result = agent_executor.invoke(
-    {
-        "input": message
-    }
+        {
+            "input": message,
+            "chat_history": chat_history
+        }
     )
 
-    print("=" * 80)
-    print(result)
-    print("=" * 80)
+    print("Customer AI response generated successfully")
 
     return result["output"]

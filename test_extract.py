@@ -8,6 +8,7 @@ My phone number is 9876543210
 """
 
 
-print(
-    extract_customer_details(text)
-)
+details = extract_customer_details(text)
+
+print("Customer detail extraction test completed.")
+print("Extracted fields:", list(details.keys()))
